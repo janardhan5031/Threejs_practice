@@ -21,6 +21,10 @@ const SphereComponent: React.FC = () => {
     camera.position.y = 5;
     camera.position.x = 5;
 
+    const light = new THREE.PointLight(0xffffff, 1000)
+    light.position.set(0, 10, 0)
+    scene.add(light)
+
 
     // Create separate renderers for each canvas
     const renderer1 = new THREE.WebGLRenderer();
@@ -34,7 +38,7 @@ const SphereComponent: React.FC = () => {
 
     const material = new THREE.MeshNormalMaterial({
     //   color: 0x00ff00,
-      wireframe: false,
+      wireframe: true,
     });
 
     const sphere = new THREE.Mesh(sphereGeometry, material);  
@@ -114,6 +118,39 @@ const SphereComponent: React.FC = () => {
     materialFolder
         .add(material, 'flatShading')
         .onChange(() => updateMaterial())
+    
+    const planeData = {
+        width: 3.6,
+        height: 1.8,
+        widthSegments: 180,
+        heightSegments: 90,
+    }
+
+    const planePropertiesFolder = gui.addFolder('PlaneGeometry')
+    planePropertiesFolder
+        .add(planeData, 'widthSegments', 1, 360)
+        .onChange(regeneratePlaneGeometry)
+    planePropertiesFolder
+        .add(planeData, 'heightSegments', 1, 180)
+        .onChange(regeneratePlaneGeometry)
+    planePropertiesFolder.open()
+    
+    const lightFolder = gui.addFolder('Light')
+    lightFolder.add(light.position, 'x', -10, 10).name('position.x')
+    lightFolder.add(material.normalScale, 'x', 0, 10, 0.01).name('normalScale.x')
+    lightFolder.add(material.normalScale, 'y', 0, 10, 0.01).name('normalScale.y')
+    lightFolder.open()
+
+    function regeneratePlaneGeometry() {
+        let newGeometry = new THREE.PlaneGeometry(
+            planeData.width,
+            planeData.height,
+            planeData.widthSegments,
+            planeData.heightSegments
+        )
+        sphere.geometry.dispose()
+        sphere.geometry = newGeometry
+    }
 
     // materialFolder.open();
     // SphereFolder.open()
