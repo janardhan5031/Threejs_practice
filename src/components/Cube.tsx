@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from 'three'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import {GUI} from 'dat.gui'
 
 const CubeComponent: React.FC = () => {
   const mount1 = useRef(null);
@@ -11,6 +12,7 @@ const CubeComponent: React.FC = () => {
   useEffect(() => {
 
     const scene = new THREE.Scene();
+    scene.add(new THREE.AxesHelper(1.5))
     const scene2 = new THREE.Scene();
     const scene3 = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -34,6 +36,7 @@ const CubeComponent: React.FC = () => {
     const camera2 = new THREE.OrthographicCamera(-3,3,3,-3,1,10)
     camera2.position.z = 1;
     // camera2.position.y = 1;
+
 
     // Create separate renderers for each canvas
     const renderer1 = new THREE.WebGLRenderer();
@@ -63,8 +66,17 @@ const CubeComponent: React.FC = () => {
     const cube = new THREE.Mesh(geometry, material);  
     const Torus = new THREE.Mesh(geometry2, material);
     const TorusNot = new THREE.Mesh(geometry3, material);
+
+    // add directions and rotations and scaling for geometries
+    const gui = new GUI()
+    const cubePosition = gui.addFolder('Cube Position')
+    cubePosition.add(cube.position,'x',-10,10)
+    cubePosition.add(cube.position,'y',-10,10)
+    cubePosition.add(cube.position,'z',-10,10)
+    cubePosition.open()
+
     scene.add(cube);
-    scene2.add(Torus);
+    scene2.add(Torus);  
     scene3.add(TorusNot)
 
     const animate = () => {
@@ -72,6 +84,8 @@ const CubeComponent: React.FC = () => {
 
       // cube.rotation.x += 0.01;
       // cube.rotation.y += 0.01;
+      // Torus.rotation.x += 0.01;
+      // Torus.rotation.y += 0.01;
 
       setCubeRotation({
         x: cube.rotation.x,
@@ -98,15 +112,6 @@ const CubeComponent: React.FC = () => {
 
   }, []);
 
-  {/* <div
-    className=" h-0 overflow-hidden grid-item"
-    ref={mount1}
-  ></div>
-  <div
-    className=" h-0 overflow-hidden grid-item"
-    // ref={mount2}fj
-    
-  >jdfkjh</div> */}
   return (
     <div className="flex gap-3">
       <div
