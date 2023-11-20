@@ -3,10 +3,12 @@ import * as THREE from 'three'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import {GUI} from 'dat.gui'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import {ThreeDots} from 'react-loader-spinner'
 
 
 const MuseumComponent: React.FC = () => {
   const mount1 = useRef(null);
+  const [isLoading,setLoading]= useState(true)
   const [cubeRotation, setCubeRotation] = useState(1);
 
   useEffect(() => {
@@ -62,6 +64,7 @@ const MuseumComponent: React.FC = () => {
                 // }
             })
             scene.add(gltf.scene)
+            setLoading(false)
         },
         (xhr) => {
             console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
@@ -97,10 +100,18 @@ const MuseumComponent: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center bg-black">
-      <div
-        className=""
-        ref={mount1}>
-      </div>
+        {
+            isLoading && <ThreeDots 
+                height="80" 
+                width="80" 
+                radius="9"
+                color="#4fa94d" 
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{position:'fixed'}}
+                visible={true}
+             />
+        }
+        <div ref={mount1}></div>
     </div>
   );
 };
