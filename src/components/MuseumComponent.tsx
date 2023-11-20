@@ -47,7 +47,7 @@ const MuseumComponent: React.FC = () => {
 
     const loader = new GLTFLoader()
     loader.load(
-        'src/GLTFModels/MuseumBakedA.glb',
+        'https://testbucketsq.s3.ap-south-1.amazonaws.com/GLTF_Models/MuseumBakedA.glb',
         function (gltf) {
             gltf.scene.traverse(function (child) {
                 // if ((child as THREE.Mesh).isMesh) {
