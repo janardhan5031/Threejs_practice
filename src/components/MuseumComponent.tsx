@@ -14,12 +14,7 @@ const MuseumComponent: React.FC = () => {
 
   useEffect(() => {
     const scene = new THREE.Scene();
-    scene.add(new THREE.AxesHelper(25))
-
-    // scene.rotation.y=45;
-    // scene.position.y=0;
-    // scene.position.z=0;
-
+    // scene.add(new THREE.AxesHelper(25)) 
 
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -29,7 +24,6 @@ const MuseumComponent: React.FC = () => {
     );
 
     const renderer = new THREE.WebGLRenderer();
-    // renderer.rotation.y=10
 
     renderer.useLegacyLights = false;
     renderer.shadowMap.enabled = true;
@@ -65,15 +59,39 @@ const MuseumComponent: React.FC = () => {
       
       // Rotate the camera around the model in the y-axis  
 
-      const speed = 0.0001; // Adjust the rotation speed
+      let speed = 0.0005; // Adjust the rotation speed
       let angle = performance.now() * speed;
+      
+      // console.log(angle)
 
-      console.log(angle)
-
-      if(angle<5.2){
+      if(angle<5.1){
         const radius = 25; // Adjust the radius of the camera orbit
         camera.position.x = scene.position.x + radius * Math.sin(angle);
+        camera.position.y =20;
         camera.position.z = scene.position.z + radius * Math.cos(angle);
+        camera.lookAt(scene.position);
+      }
+      // down the  camera
+      else if(angle>5.1 && angle<6){
+        const height = 0.5; // Adjust the radius of the camera orbit
+        camera.position.y =camera.position.y -height;
+        camera.lookAt(scene.position);
+      }
+
+      // move towards center
+      else if(angle>6 && angle<6.12){
+        const length = 0.5; // Adjust the radius of the camera orbit
+        const x_z_relation=1.6
+        camera.position.x =camera.position.x +(length*x_z_relation)-speed;
+        camera.position.z =camera.position.z -(length*x_z_relation-.5)-speed;
+        camera.lookAt(scene.position);
+      }
+
+      // rotate in inner circle
+      else if(angle>6.7 && angle<11.35){
+        const radius = 9; // Adjust the radius of the camera orbit
+        camera.position.x = scene.position.x + radius * Math.sin(angle);
+        camera.position.z = scene.position.z+ radius * Math.cos(angle);
         camera.lookAt(scene.position);
       }
 
